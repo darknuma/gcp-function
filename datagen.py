@@ -6,7 +6,7 @@ from google.cloud import storage, bigquery
 import uuid
 from dotenv import load_dotenv
 
-
+# load env
 load_dotenv()
 
 BUCKET = 'order_buck'
