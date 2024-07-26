@@ -34,7 +34,8 @@ jobs:
       uses: google-github-actions/deploy-cloud-functions@v2
       with:
         name: 'order_function'
-        runtime: 'python310'
+        runtime: 'python311'
+        region: 'europe-west1'
         event_trigger_type: 'google.storage.object.finalize'
         event_trigger_resource: 'projects/${{ secrets.GCP_PROJECT_ID }}/buckets/order_buck'
         entry_point: 'file_processor'
