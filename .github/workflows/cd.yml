@@ -1,0 +1,37 @@
+name: Continuos Deployment of GCP Function
+
+on:
+  push:
+    branches:
+      - master
+  
+
+
+  jobs:
+    deploy:
+      runs-on: ubuntu-latest
+     
+
+      steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - id: 'auth'
+        uses: 'google-github-actions/auth@v2'
+        with:
+          credentials_json: '${{ secrets.GCP_FUNCTION_ACCESS }}'
+        
+      - name: Set up Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: '${{ secrets.GCP_PROJECT_ID }}'
+          export_default_credentials: False
+
+      - name: Deploy to GCP Functions
+        uses: google-github-actions/deploy-cloud-functions@v2
+        with:
+          name: 'order_function'
+          runtime: 'python310'
+          event_trigger_type: 'google.storage.object.finalize'
+          event_trigger_resource: 'projects/${{ secrets.GCP_PROJECT_ID }}/buckets/order_buck'
+          entry_point: 'file_processor'
